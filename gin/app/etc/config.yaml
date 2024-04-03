@@ -1,0 +1,11 @@
+Host:
+  0.0.0.0
+Port:
+  8008
+MySql:
+  DataSource:
+    www:Lh201807.@tcp(8.130.78.9:9906)/react_gin?charset=utf8mb4&parseTime=true
+#   www:Lh201807.@tcp(192.168.195.135:1002)/test?charset=utf8mb4&parseTime=true
+JWT:
+  Secret:
+    you_secret
