@@ -7,6 +7,7 @@ import { setIndexMenu } from "./slice/indexMenuSlice.js";
 function App(props) {
 	const dispatch = useDispatch();
     useEffect(() =>{
+		window.location.href = "#root";
 		var url = window.location.href
 		url = url.split("/")
 		var index = url.length;

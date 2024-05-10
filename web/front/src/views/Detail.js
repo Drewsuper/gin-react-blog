@@ -25,6 +25,7 @@ const Markdown = function(){
 	searchParams = getPath(searchParams.search).id;
 	// const md_url = "";
 	useEffect(() => {
+		window.location.href = "#root";
 		getBlogContext(searchParams).then((res) =>{
 			if (res.err === null){
 				fetch(res.data).then( res => res.text() )

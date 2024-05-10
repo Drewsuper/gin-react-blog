@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState,useRef } from "react";
 import { Card, Drawer, Spin, Empty, Pagination, Row, Col, Button, Divider } from "antd";
 import { FieldTimeOutlined,PlusCircleOutlined,EditOutlined,EllipsisOutlined } from "@ant-design/icons";
 
@@ -6,7 +6,7 @@ import { getBlogContext } from "../utils/api.js";
 import Test from "./test.js";
 
 const BlogEdit = ()=>{
-	
+	const cRef = useRef(null);
 	const [spinLoadding,setSpinLoadding] = useState(true);
 	const [pagination, setPagination] = useState(0);
 	const [curPagination, setCurPagination] = useState(1);
@@ -31,9 +31,18 @@ const BlogEdit = ()=>{
 	}
 	
 	const onFinishDrawer = ()=>{
+		cRef.current && cRef.current.clearData()
 		setDrawerOpen(false);
 	};
-	
+	const openDrawer = (data,id)=>{
+		if (data){
+			setDrawerOpen(true);
+			cRef.current.clearData();
+		}else{
+			setDrawerOpen(true);
+			setDrawerData(id)
+		}
+	};
 	const onCloseDrawer = ()=>{
 		setDrawerOpen(false);
 	};
@@ -43,7 +52,7 @@ const BlogEdit = ()=>{
 		<div>
 			<Row style={{"marginBottom":".2vh"}}>
 				<Col>
-					<Button onClick={()=>{setDrawerOpen(true)}} type="text" icon={<PlusCircleOutlined />}>新增</Button>
+					<Button onClick={()=>{openDrawer(1)}} type="text" icon={<PlusCircleOutlined />}>新增</Button>
 				</Col>
 			</Row>
 			<Divider />
@@ -58,8 +67,8 @@ const BlogEdit = ()=>{
 								bordered={false} 
 								hoverable 
 								actions={[
-									<EditOutlined onClick={()=>{setDrawerOpen(true);setDrawerData(item.key)}} />,
-									<EllipsisOutlined onClick={()=>{setDrawerOpen(true);}} />
+									<EditOutlined onClick={()=>{openDrawer(0,item.key)}} >编辑</EditOutlined>,
+									<EllipsisOutlined onClick={()=>{setDrawerOpen(true);}} >隐藏</EllipsisOutlined>
 									]}
 								>
 									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />真实名称:</p>
@@ -78,7 +87,7 @@ const BlogEdit = ()=>{
 				open={drawerOpen}
 				width={"60vw"}
 			>
-				<Test data={drawerData}></Test>
+				<Test data={drawerData} cRef={cRef}></Test>
 			</Drawer>
 		</div>
 	)

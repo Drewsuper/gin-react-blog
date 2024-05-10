@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { Form, Button, Input, Select } from "antd";
 import "github-markdown-css";
 import {MdEditor} from "md-editor-rt";
 import 'md-editor-rt/lib/style.css'
 import axios from "axios";
 import { getClassLabel, getTagsLabel,getBlogAllInfor } from "../utils/api.js";
+import { useImperativeHandle } from "react";
 
 
-const Test = function({data}){
+const Test = ({data,cRef}) => {
 	
 	const [defToolbar] = useState([
 		  'bold',
@@ -39,7 +40,9 @@ const Test = function({data}){
 		  'htmlPreview',
 		  'catalog',
 	]);
-	
+	useImperativeHandle(cRef,()=>({
+		clearData: clearData
+	}));
 	const [form_data]= Form.useForm();
 	const [text, setText] = useState("");
 	const [flag,setFlag] = useState(false);
@@ -72,8 +75,6 @@ const Test = function({data}){
 					console.log(res.data)
 				}
 			})
-		}else{
-			
 		}
 		getClassLabel().then((res)=>{
 			if (res.err === null){
@@ -94,6 +95,12 @@ const Test = function({data}){
 			})
 		);
 		callback(res.map((item) => item.data.data))
+	};
+	const clearData = ()=>{
+		form_data.resetFields();
+		setText("");
+		setFlag(0);
+		console.log("heiheihei")
 	};
 	const upMdFile = async function (v){
 		if (v.length !== 0 && flag){
@@ -157,7 +164,7 @@ const Test = function({data}){
 					label="标签"
 					rules={[
 						{
-							required:true
+							required:false,
 						}
 					]}
 				>
