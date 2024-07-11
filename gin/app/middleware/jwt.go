@@ -11,8 +11,8 @@ func Auth() gin.HandlerFunc {
 		auth := ctx.Request.Header.Get("Authorization")
 		if len(auth) == 0 {
 			ctx.Abort()
-			ctx.JSON(400, types.CommonRps{
-				Code: 400,
+			ctx.JSON(200, types.CommonRps{
+				Code: 405,
 				Mes:  "no auth request",
 			})
 			return
@@ -20,8 +20,8 @@ func Auth() gin.HandlerFunc {
 		_, err := utils.ParseToken(auth)
 		if err != nil {
 			ctx.Abort()
-			ctx.JSON(400, types.CommonRps{
-				Code: 400,
+			ctx.JSON(200, types.CommonRps{
+				Code: 406,
 				Mes:  "no auth request",
 			})
 			return

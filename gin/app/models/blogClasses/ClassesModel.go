@@ -12,6 +12,8 @@ type ClassModel struct {
 	ViewName   string    `json:"view_name" gorm:"column:view_name;default:NULL" json:"view_name"`
 	CreateTime time.Time `json:"create_time" gorm:"column:create_time;default:CURRENT_TIMESTAMP" json:"create_time"`
 	UpdateTime time.Time `json:"update_time" gorm:"column:update_time;default:CURRENT_TIMESTAMP" json:"update_time"`
+	IsUp       int       `json:"is_up" gorm:"column:is_up;default:1"`
+	IsDel      int       `json:"is_del" gorm:"column:is_del;default:1"`
 }
 
 func (ClassModel) TableName() string {
@@ -64,8 +66,10 @@ func DeleteClassById(id int, is_up int) error {
 	tx := models.DB.Begin()
 	res := tx.Model(&ClassModel{}).Where("id = ?", id).Updates(map[string]interface{}{"is_up": is_up}).RowsAffected
 	if res < 0 {
+		tx.Rollback()
 		return errors.New("failed")
 	} else {
+		tx.Commit()
 		return nil
 	}
 }
@@ -74,8 +78,10 @@ func UpdateClassBy(id int, realName string, viewName string) error {
 	tx := models.DB.Begin()
 	res := tx.Model(&ClassModel{}).Where("id = ?", id).Updates(map[string]interface{}{"real_name": realName, "view_name": viewName}).RowsAffected
 	if res < 0 {
+		tx.Rollback()
 		return errors.New("failed")
 	} else {
+		tx.Commit()
 		return nil
 	}
 }
@@ -95,6 +101,7 @@ func AddNewClass(classModel *ClassModel) (int64, error) {
 func FindAllClassLabels(modelData *[]ClassModel) (res int64, err error) {
 	tx := models.DB.Begin()
 	res = tx.Model(&ClassModel{}).Select("id", "real_name").Find(modelData).RowsAffected
+	tx.Commit()
 	if res < 0 {
 		return res, errors.New("failed get data")
 	} else {

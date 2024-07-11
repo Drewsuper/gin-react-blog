@@ -1,11 +1,20 @@
 Host:
-  0.0.0.0
+  127.0.0.1
 Port:
   8008
 MySql:
   DataSource:
-    www:Lh201807.@tcp(8.130.78.9:9906)/react_gin?charset=utf8mb4&parseTime=true
-#   www:Lh201807.@tcp(192.168.195.135:1002)/test?charset=utf8mb4&parseTime=true
+	your_db address
+Redis:
+  Addr:
+    192.168.195.135:1003
+  Pwd:
+    Lh201807.
+  DB:
+    0
+BaseKey:
+  UserKey:
+    "user:cache:"
 JWT:
   Secret:
-    you_secret
+    "you_secret"

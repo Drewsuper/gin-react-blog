@@ -13,6 +13,8 @@ type TagsModel struct {
 	CreateTime time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP" json:"create_time"`
 	UpTime     time.Time `gorm:"column:up_time;default:CURRENT_TIMESTAMP" json:"up_time"`
 	ClassId    int       `gorm:"column:class_id;NOT NULL" json:"class_id"`
+	IsUp       int       `json:"is_up" gorm:"column:is_up;default:1"`
+	IsDel      int       `json:"is_del" gorm:"column:is_del;default:1"`
 }
 
 func (TagsModel) TableName() string {
@@ -28,6 +30,18 @@ func AddNewTag(data *TagsModel) error {
 	} else {
 		tx.Commit()
 		return nil
+	}
+}
+
+func DeleteTagById_IsDel(id, isDel int) error {
+	tx := models.DB.Begin()
+	res := tx.Model(&TagsModel{}).Where("id = ? ", id).Updates(map[string]interface{}{"is_del": isDel}).RowsAffected
+	if res > 0 {
+		tx.Commit()
+		return nil
+	} else {
+		tx.Rollback()
+		return errors.New("failed")
 	}
 }
 
@@ -53,7 +67,7 @@ func FindTagsByClassId(classId int, data *[]TagsModel) error {
 func FindTagById(id int) (TagsModel, error) {
 	tx := models.DB.Begin()
 	var data TagsModel
-	tx.Where("id = ? ", id).Select("id,view_name,class_id").First(&data)
+	tx.Where("id = ? ", id).Where("is_del =?", 1).Select("id,view_name,class_id").First(&data)
 	tx.Commit()
 	return data, nil
 }
@@ -107,7 +121,8 @@ func UpdateTagById(id int, realName string, viewName string) error {
 
 func FindAllTagsLabels(modelData *[]TagsModel, classs_id int) (res int64, err error) {
 	tx := models.DB.Begin()
-	res = tx.Model(&TagsModel{}).Select("id", "real_name").Where("class_id = ?", classs_id).Find(modelData).RowsAffected
+	res = tx.Model(&TagsModel{}).Select("id", "real_name").Where("class_id = ?", classs_id).Where("is_up = ?", 1).Find(modelData).RowsAffected
+	tx.Commit()
 	if res < 0 {
 		return res, errors.New("failed get data")
 	} else {

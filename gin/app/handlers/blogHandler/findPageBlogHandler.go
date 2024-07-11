@@ -24,7 +24,7 @@ func FindPageBlogHandler(ctx *gin.Context) {
 		for _, blog := range blogData {
 			class, _ := blogClasses.FindClassById(blog.ClassId)
 			tag, _ := blogTags.FindTagById(blog.TagsId)
-			responseData = append(responseData, types.BlogInformation{ID: blog.Id, BlogTitle: blog.Title, ClassId: class.Id, ClassName: class.ViewName, TagName: tag.ViewName, TagId: tag.Id})
+			responseData = append(responseData, types.BlogInformation{ID: blog.Id, BlogTitle: blog.Title, ClassId: class.Id, ClassName: class.ViewName, TagName: tag.ViewName, TagId: tag.Id, Des: blog.Des})
 		}
 		if errData != nil {
 			ctx.JSON(200, types.CommonRps{

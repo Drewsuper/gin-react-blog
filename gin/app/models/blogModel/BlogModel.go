@@ -3,7 +3,6 @@ package blogModel
 import (
 	"errors"
 	"gin-new/app/models"
-	"log"
 	"time"
 )
 
@@ -17,6 +16,7 @@ type BlogModel struct {
 	UpdateTime time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP" json:"update_time"`
 	ClassId    int       `gorm:"column:class_id;NOT NULL" json:"class_id"`
 	TagsId     int       `gorm:"column:tags_id;NOT NULL" json:"tags_id"`
+	Des        string    `gorm:"column:des" json:"des"`
 }
 
 func (BlogModel) TableName() string {
@@ -34,23 +34,25 @@ func AllFindBlog(data *[]BlogModel) error {
 func FindPageBlog(data *[]BlogModel, page int) error {
 	tx := models.DB.Begin()
 	offset := pageSize * (page - 1)
-	row, err := tx.Offset(offset).Limit(pageSize).Select("id,title,class_id,tags_id").Find(data).Rows()
-	_ = row.Close()
-	tx.Commit()
-	return err
+	res := tx.Offset(offset).Limit(pageSize).Select("id,title,class_id,tags_id,des").Find(data).RowsAffected
+	if res < 0 {
+		tx.Rollback()
+		return errors.New("failed")
+	} else {
+		tx.Commit()
+		return nil
+	}
 }
 
 func FindOneById(id int) (BlogModel, error) {
 	var blog BlogModel
 	tx := models.DB.Begin()
-	row, err := tx.Where("id = ?", id).First(&blog).Rows()
-	_ = row.Close()
+	row := tx.Where("id = ?", id).First(&blog).RowsAffected
 	tx.Commit()
-	if err == nil {
+	if row >= 0 {
 		return blog, nil
 	}
-	log.Printf("\033[0;31m%v\033[0m", err)
-	return BlogModel{}, err
+	return BlogModel{}, errors.New("failed")
 }
 
 func NewBlogContext(blog *BlogModel) (int64, error) {
@@ -62,5 +64,19 @@ func NewBlogContext(blog *BlogModel) (int64, error) {
 	} else {
 		tx.Rollback()
 		return -1, errors.New("插入失败")
+	}
+}
+
+func FindAllBlogSize() (num int64, err error) {
+	tx := models.DB.Begin()
+	res := tx.Model(&BlogModel{}).Count(&num).RowsAffected
+	if res < 0 {
+		tx.Rollback()
+		err = errors.New("failed")
+		return
+	} else {
+		tx.Commit()
+		err = nil
+		return
 	}
 }

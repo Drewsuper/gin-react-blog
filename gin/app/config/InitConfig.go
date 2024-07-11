@@ -12,15 +12,18 @@ type ConfigData struct {
 	Port  string `yaml:"Port"`
 	Mysql struct {
 		DataSource string `yaml:"DataSource"`
-	} `yaml:"mysql"`
+	} `yaml:"MySql"`
 	JWT struct {
 		Secret string `yaml:"Secret"`
 	} `yaml:"JWT"`
 	Redis struct {
 		Addr string `yaml:"Addr"`
-		PWD  string `yaml:"password"`
+		PWD  string `yaml:"Pwd"`
 		DB   int    `yaml:"DB"`
-	} `yaml:"redis"`
+	} `yaml:"Redis"`
+	BaseKey struct {
+		UserKey string `yaml:"UserKey"`
+	}
 }
 
 var Config *ConfigData

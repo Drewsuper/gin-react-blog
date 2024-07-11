@@ -21,8 +21,26 @@ func FindBlogHandler(ctx *gin.Context) {
 		}
 	}
 	ctx.JSON(200, types.CommonRps{
-		Code: 200,
+		Code: 401,
 		Mes:  "failed",
 	})
 	return
+}
+
+func FindBlogSize(ctx *gin.Context) {
+	num, err := blogModel.FindAllBlogSize()
+	if err != nil {
+		ctx.JSON(200, types.CommonRps{
+			Code: 402,
+			Mes:  "failed",
+		})
+		return
+	} else {
+		ctx.JSON(200, types.CommonRps{
+			Code: 200,
+			Mes:  "success",
+			Data: num,
+		})
+		return
+	}
 }

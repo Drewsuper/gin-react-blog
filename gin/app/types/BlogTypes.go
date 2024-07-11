@@ -9,8 +9,7 @@ const timeLayout = "2006-01-02 15:04:05"
 
 type (
 	BlogFindReq struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
+		ID int `json:"id"`
 	}
 
 	BlogNewReq struct {
@@ -35,6 +34,7 @@ type (
 		BlogTitle string `json:"blog_title"`
 		ClassName string `json:"class_name"`
 		TagName   string `json:"tag_name"`
+		Des       string `json:"des"`
 	}
 )
 
