@@ -156,6 +156,7 @@ const HomeClass = () => {
 										<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{item.create_time}</p>
 										<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{item.update_time}</p>
 										<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />状态:{item.is_up ? "上线":"下线"}</p>
+										<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />删除:{item.is_del ? "否":"是"}</p>
 									</Card>
 								</div>
 								)

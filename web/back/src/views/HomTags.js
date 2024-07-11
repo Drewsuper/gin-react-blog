@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FieldTimeOutlined,PlusCircleOutlined,EditOutlined } from "@ant-design/icons"
 
 
-import { getAllBlogTags,getClassDataById,getClassLabel,getTagetDataById } from "../utils/api.js";
+import { getAllBlogTags,getClassDataById,getClassLabel,getTagetDataById,newTagsData,deleteTags } from "../utils/api.js";
 
 
 const HomeTags = ()=>{
@@ -39,7 +39,15 @@ const HomeTags = ()=>{
 	};
 	
 	const onFinishForm = (values) => {
-		console.log(values);
+		newTagsData(values).then((res)=>{
+			if (res.err === null){
+				message.success('添加成功！',5)
+			}else{
+				message.error('添加失败！',5)
+			}
+			onCloseDrawer();
+			getTagsData();
+		})
 	};
 	
 	const onFinishDrawer = ()=>{
@@ -67,7 +75,8 @@ const HomeTags = ()=>{
 	}
 	
 	const onCloseDrawer = (data)=>{
-		setNewOpen(false);	
+		form.resetFields();
+		setNewOpen(false);
 	};
 	
 	const changePagination = (page,pageSize)=>{
@@ -86,6 +95,21 @@ const HomeTags = ()=>{
 			},2000);
 		})
 	} 
+	
+	const deleteClassData = (id,up,is_up)=>{
+		if (up === is_up){
+			return message.warning("状态以为要设定的状态！");
+		}else{
+			deleteTags(id,up).then((res)=>{
+				if(res.err === null){
+					return message.success("更新成功！",5)
+				}else{
+					return message.error("更新失败！",5)
+				}
+			})
+		}
+		getTagsData()
+	}
 	
 	const getSelectData = ()=>{
 		console.log("ser")
@@ -114,13 +138,13 @@ const HomeTags = ()=>{
 								<Card title={'显示名称：'+item.view_name} bordered={false} hoverable 
 									actions = {[
 										<Button type="text" onClick={()=>{onOpenDrawer(item.id)}} icon={<EditOutlined />}>编辑</Button>,
-										<Button type="text" onClick={()=>{console.log(22)}} danger icon={<EditOutlined />}>下线</Button>,
-										<Button type="text" onClick={()=>{console.log(333)}}>上线</Button>
+										<Button type="text" onClick={()=>{deleteClassData(item.id,0,item.is_up)}} danger icon={<EditOutlined />}>下线</Button>,
+										<Button type="text" onClick={()=>{deleteClassData(item.id,1,item.is_up)}}>上线</Button>
 									]} 
 								>
 									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined /> {'真实名称：'+item.real_name}</p>
 									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined /> {item.up_time}</p>
-									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined /> class_id:{item.class_id}</p>
+									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined /> 所属类别的ID:{item.class_id}</p>
 									<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />状态:{item.is_up ? "上线":"下线"}</p>
 								</Card>
 							</div>
@@ -138,7 +162,7 @@ const HomeTags = ()=>{
 						rules = {[{required: true},]}
 					>
 						<Select
-							mode="multiple"
+							// mode="multiple"
 						      allowClear
 						      style={{
 						        width: '100%',

@@ -311,6 +311,28 @@ const getAllBlogClasses = async ()=>{
 	return reqData;
  }
  
+ const newTagsData = async (data)=>{
+ 	var reqData = {
+ 		data:null,
+ 		err: "failed",
+ 		code:200,
+ 	}
+ 	await axios.post("/api/blog/tag/new",JSON.stringify(data)).then((res)=>{
+ 		reqData.code = res.data.code;
+ 		if  (res.data.code === 200){
+ 			reqData.data = res.data.data;
+ 			reqData.err = null;
+ 		}else{
+ 			
+ 		}
+ 	}).catch((err)=>{
+ 		reqData.code = 400;
+ 		reqData.data = null;
+ 		reqData.err = "failed";
+ 	})
+ 	return reqData;
+ }
+ 
  const deleteClass = async (id,up)=>{
 	var reqData = {
 		err: 'failed',
@@ -329,6 +351,26 @@ const getAllBlogClasses = async ()=>{
 		reqData.err = "failed";
 	})
 	return reqData;
+ }
+ 
+ const deleteTags = async (id,up)=>{
+ 	var reqData = {
+ 		err: 'failed',
+ 		data: null,
+ 		code:200,
+ 	}
+ 	await axios.post("/api/blog/tag/delete",JSON.stringify({id:id,is_up:up})).then((res)=>{
+ 		reqData.code = res.data.code;
+ 		if (res.data.code === 200){
+ 			reqData.err = null;
+ 		}else{
+ 			reqData.err = "failed";
+ 		}
+ 	}).catch((err)=>{
+ 		reqData.code = 400;
+ 		reqData.err = "failed";
+ 	})
+ 	return reqData;
  }
 
 const upMDFile = async (data)=>{
@@ -357,7 +399,10 @@ export {
 	getClassDataById,
 	updateClassData,
 	newClassData,
+	newTagsData,
 	deleteClass,
+	deleteTags,
 	getTagetDataById,
 	upMDFile,
+	
 }
