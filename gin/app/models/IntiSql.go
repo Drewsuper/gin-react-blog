@@ -2,11 +2,12 @@ package models
 
 import (
 	"gin-new/app/config"
+	"log"
+	"time"
+
 	redis "github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"time"
 )
 
 var (

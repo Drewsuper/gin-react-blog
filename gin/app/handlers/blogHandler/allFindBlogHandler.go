@@ -3,6 +3,7 @@ package blogHandler
 import (
 	"gin-new/app/models/blogModel"
 	"gin-new/app/types"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,9 +12,9 @@ func AllFindBlogHandler(ctx *gin.Context) {
 	err := blogModel.AllFindBlog(&data)
 	if err == nil {
 		ctx.JSON(200, types.CommonRps{
-			200,
-			"success",
-			data,
+			Code: 200,
+			Mes:  "success",
+			Data: data,
 		})
 		return
 	} else {

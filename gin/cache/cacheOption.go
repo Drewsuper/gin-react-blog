@@ -2,6 +2,7 @@ package cache
 
 import (
 	"context"
+	"time"
 )
 
 func GetValueKey(key string) (interface{}, error) {
@@ -23,6 +24,7 @@ func DeleteKey(key string) error {
 	return err
 }
 
-//func SetValueEx(key string, value any) error {
-//
-//}
+func SetValueEx(key string, value interface{}) error {
+	err := Redis.SetNX(context.Background(), key, value, time.Hour*5)
+	return err.Err()
+}

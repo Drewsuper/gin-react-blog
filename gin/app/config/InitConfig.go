@@ -2,12 +2,14 @@ package config
 
 import (
 	"flag"
-	"github.com/spf13/viper"
 	"log"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type ConfigData struct {
+	Mode  string `yaml:"Mode"`
 	Host  string `yaml:"Host"`
 	Port  string `yaml:"Port"`
 	Mysql struct {

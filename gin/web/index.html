@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Welcome</title>
+    </head>
+    <body>
+        {{ if eq .data.Code 200 }}
+            <center>
+                <P> This appplication has started {{ .data.Mes }} </P>
+            </center>
+        {{ end }}
+    </body>
+</html>
