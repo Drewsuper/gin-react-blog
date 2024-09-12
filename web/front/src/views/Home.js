@@ -17,50 +17,11 @@ const Home = function (){
 	const BackGround = require("../imgDir/index.jpg");
 	const [ready,setReady] = useState(true);
 	const [allPage,setAllPage] = useState(10);
-	var arr = [
-		{
-			title:"article1",
-			data:{
-					UserName: 'Zhou Maomao',
-					Telephone: '1810000000',
-					Live: 'Hangzhou, Zhejiang',
-			}
-		},{
-			title:"artical4",
-			data:{
-					UserName: 'Zhou Maomao',
-					Telephone: '1810000000',
-					Live: 'Hangzhou, Zhejiang',
-			}
-		},
-		{
-			title:"artical5",
-			data:{
-					UserName: 'Zhou Maomao',
-					Telephone: '1810000000',
-					Live: 'Hangzhou, Zhejiang',
-			}
-		},{
-			title:"artical6",
-			data:{
-					UserName: 'Zhou Maomao',
-					Telephone: '1810000000',
-					Live: 'Hangzhou, Zhejiang',
-			}
-		},
-		{
-			title:"artical7",
-			data:{
-					UserName: 'Zhou Maomao',
-					Telephone: '1810000000',
-					Live: 'Hangzhou, Zhejiang',
-			}
-		}
-	];
+	const [blogArr, setBlogArr] = useState([]);
 	useEffect( () => {
 		getBlogPage(1).then((res)=>{
 			if (res.err === null){
-				console.log(res.data)
+				setBlogArr(res.data)
 			}
 		});
 		getBlogAllPage().then((res) =>{
@@ -79,12 +40,12 @@ const Home = function (){
 	}, [] )
 	const [style,setStyle] = useState(true);
 	const changePagination = (page,pageSize) =>{
-		console.log(page)
-		// getBlogPage(page).then((res) => {
-		// 	if (res.err === null){
-		// 		arr = res.data
-		// 	}
-		// })
+		getBlogPage(page).then((res) => {
+			if (res.err === null){
+				setBlogArr(res.data)
+				console.log(blogArr)
+			}
+		})
 	}
 	
 	
@@ -118,22 +79,22 @@ const Home = function (){
 						</center>
 						<div>
 							{
-								arr.map((itme) => {
+								blogArr.map((itme) => {
 									return (
 									<div style={{"padding":".1% .1%"}}>
-										<Card title={itme.title} bordered={false} hoverable onClick={()=>{
-											navigate(`/detail?id=${itme.title}`);
+										<Card title={itme.blog_title} bordered={false} hoverable onClick={()=>{
+											navigate(`/detail?id=${itme.id}`);
 										}}>
-											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.data.UserName}</p>
-											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.data.Telephone}</p>
-											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.data.Live}</p>
+											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.des}</p>
+											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.class_name}</p>
+											<p style={{"float":"left", "paddingLeft":"5%"}}><FieldTimeOutlined />:{itme.tag_name}</p>
 										</Card>
 									</div>
 									)
 								})
 							}
 						</div>
-						<center><Pagination style={{"margin":"1% 0"}} defaultCurrent={1}  total={allPage} onChange={changePagination}/></center>
+						<Pagination style={{"margin":"1% 0"}} defaultCurrent={1}  total={allPage} onChange={changePagination} align="center" />
 						<Footer/>
 					</div>
 				)

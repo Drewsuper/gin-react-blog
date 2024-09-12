@@ -6,6 +6,9 @@ import {setMenu, } from "../slice/menuSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 
 import Logo from "../img/logo.png"
+import { HomeIcon, ClassIcon, TagsIcon, ArticleIcon } from "./SelfIcon.js";
+
+
 
 const MyMenu = function(){
 	const navigate = useNavigate();
@@ -16,11 +19,11 @@ const MyMenu = function(){
         {
             label:"主页",
             key: 'home',
-            icon: <SettingOutlined />,
+            icon: <HomeIcon />,
 			title:"主页",
         },
 		{
-		    label: '文章设置',
+		    label:"文章设置",
 		    key: 'setting',
 		    icon: <SettingOutlined />,
 			title:"文章设置",
@@ -28,16 +31,19 @@ const MyMenu = function(){
 				{
 					label:"分类设置",
 					key:"class",
+					icon:<ClassIcon />,
 					title:'分类设置',
 				},
 				{
 					label:"标签设置",
 					key:"tags",
+					icon: <TagsIcon />,
 					title:"标签设置",
 				},
 				{
 					label:"文章设置",
 					key:"cts",
+					icon: <ArticleIcon />,
 					title:"文章设置",
 				}
 			]
@@ -63,7 +69,7 @@ const MyMenu = function(){
     return (
 		<div>
 			<div style={{"width":"80%","height":50,"display":"inline-block"}} onClick={LogoClick}>
-				<img src={LogoURL}  title="logo" style={{"width":"50%","height":"100%","display":"inline-block"}}/>
+				<img src={LogoURL}  title="logo" style={{"width":"50%","height":"100%","display":"inline-block"}} />
 			</div>
 			<Menu
 				style={{

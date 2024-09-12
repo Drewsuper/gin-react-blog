@@ -44,6 +44,17 @@ func FindPageBlog(data *[]BlogModel, page int) error {
 	}
 }
 
+func FindBlogContextById(id int) (BlogModel, error) {
+	var blog BlogModel
+	tx := models.DB.Begin()
+	row := tx.Where("id = ?", id).Select("id,des,content").First(&blog).RowsAffected
+	tx.Commit()
+	if row >= 0 {
+		return blog, nil
+	}
+	return BlogModel{}, errors.New("failed")
+}
+
 func FindOneById(id int) (BlogModel, error) {
 	var blog BlogModel
 	tx := models.DB.Begin()

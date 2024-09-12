@@ -20,6 +20,7 @@ const Markdown = function(){
 	const htmlText = ""
 	const [markdown, setMarkdwon] = useState("");
 	const [loading, setLoading] = useState(true);
+	const [title,setTitle] = useState("");
 	const { Content } = Layout;
 	let searchParams = useLocation();
 	searchParams = getPath(searchParams.search).id;
@@ -28,8 +29,10 @@ const Markdown = function(){
 		window.location.href = "#root";
 		getBlogContext(searchParams).then((res) =>{
 			if (res.err === null){
-				fetch(res.data).then( res => res.text() )
+				fetch(res.data.data).then( res => res.text() )
 				.then(text => setMarkdwon(text));
+				console.log(res);
+				setTitle(res.data.title);
 			}else{
 				fetch(page).then(res => res.text())
 				.then(text => setMarkdwon(text));
@@ -40,7 +43,7 @@ const Markdown = function(){
 		{
 			key: "1",
 			label: "目录",
-			children: <MarkNav source={markdown} updateHashAuto={true}/>
+			children: <MarkNav source={markdown} updateHashAuto={false}/>
 		}
 	];
 	setTimeout(()=>{
@@ -49,13 +52,13 @@ const Markdown = function(){
 	return (
 		<Layout>
 			<Helmet>
-				<title>{`${searchParams} -- 泉城飘叶`}</title>
+				<title>{`${title} -- 泉城飘叶`}</title>
 			</Helmet>
 			<MyMenu/>
 			<Spin spinning={loading} tip="lading ....." style={{"minHeight":"100vh","position":"fixed"}}>
 				{
 					loading ? <div style={{"minHeight":"80vh"}}></div>: (
-						<Content className="conent" style={{"backgroundColor":"#e4e6eb"}}>
+						<Content className="conent" style={{"backgroundColor":"#e4e6eb","minHeight":"80vh"}}>
 						<ConfigProvider>
 							<Collapse
 								style={{"position":"fixed","top":"80px","left":'10px',"width":"19%"}}

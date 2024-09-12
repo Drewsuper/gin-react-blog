@@ -13,12 +13,14 @@ type (
 	}
 
 	BlogNewReq struct {
-		BName    string `json:"b_name"`
-		BDate    string `json:"b_date"`
-		BContext string `json:"b_context"`
-		BUpDate  string `json:"up_date"`
-		BUp      int    `json:"b_up"`
-		UserId   int    `json:"u_id"`
+		BName    string    `json:"b_name"`
+		BDate    time.Time `json:"b_date"`
+		BContext string    `json:"b_context"`
+		BUpDate  time.Time `json:"up_date"`
+		BUp      int       `json:"b_up"`
+		ClassID  int       `json:"class_id"`
+		TagId    int       `json:"tag_id"`
+		Des      string    `json:"des"`
 	}
 	BlogUpdateRep struct {
 		Options int    `json:"options"`
@@ -39,11 +41,19 @@ type (
 )
 
 func (b BlogNewReq) ToBlogModel() blogModel.BlogModel {
-	if len(b.BUpDate) == 0 {
-		b.BUpDate = time.Now().Format(timeLayout)
+	if len(b.BUpDate.Format(timeLayout)) == 0 {
+		b.BUpDate = time.Now()
 	}
-	if len(b.BDate) == 0 {
-		b.BDate = time.Now().Format(timeLayout)
+	if len(b.BDate.Format(timeLayout)) == 0 {
+		b.BDate = time.Now()
 	}
-	return blogModel.BlogModel{}
+	return blogModel.BlogModel{
+		Title:      b.BName,
+		ClassId:    b.ClassID,
+		TagsId:     b.TagId,
+		Des:        b.Des,
+		Content:    b.BContext,
+		CreateTime: b.BDate,
+		UpdateTime: b.BUpDate,
+	}
 }

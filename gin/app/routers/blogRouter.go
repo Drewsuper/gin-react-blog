@@ -6,11 +6,13 @@ import (
 	"gin-new/app/handlers/classHandler"
 	"gin-new/app/handlers/tagHandler"
 	"gin-new/app/middleware"
+
 	"github.com/gin-gonic/gin"
 )
 
 func init_blog_router(g *gin.RouterGroup) {
 	g.POST("/blog/find_by_id_all", middleware.Auth(), blogHandler.FindBlogHandler)
+	g.POST("/blog/find_by_id", blogHandler.FindBlogContextHandler)
 	g.POST("/blog/new", middleware.Auth(), blogHandler.NewBlogHandler)
 	g.POST("/blog/find_all", blogHandler.AllFindBlogHandler)
 	g.POST("/blog/find_page", blogHandler.FindPageBlogHandler)

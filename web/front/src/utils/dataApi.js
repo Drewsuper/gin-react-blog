@@ -3,12 +3,17 @@ import axios from "axios";
 const getBlogContext =  async (dataId)=>{
 	var reqData = {
 		err: "failed",
-		data: null,
+		data: {
+			data:null,
+			title:null
+		},
 	}
-	var data = {id : dataId}
+	var data = {id : parseInt(dataId)}
 	 await axios.post("/api/blog/find_by_id",JSON.stringify(data)).then( (res) =>{
 		if(res.data.code === 200){
-			reqData.data = res.data.data.content;
+			reqData.err = null;
+			reqData.data.data = "/v1/"+res.data.data.content;
+			reqData.data.title = res.data.data.title;
 		}
 	}).catch((err) => {
 		reqData.err = err;

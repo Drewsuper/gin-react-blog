@@ -163,7 +163,7 @@ const HomeClass = () => {
 						})
 					}
 				</div>
-				<center><Pagination style={{"margin":"1% 0"}} defaultCurrent={1}  total={pagination} onChange={changePagination}/></center>
+				<center><Pagination style={{"margin":"1% 0"}} defaultCurrent={1}  total={pagination} onChange={changePagination} align="center"/></center>
 				<Drawer onClose={onCloseDrawer} onFinish={onFinishDrawer} open={newOpen} width={"60vw"}>
 					<Form {...layout} form={form} onFinish={onFinishForm} style={{"marginTop":"20vh"}}>
 						<Form.Item

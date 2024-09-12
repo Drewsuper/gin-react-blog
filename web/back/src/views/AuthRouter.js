@@ -23,7 +23,7 @@ function AuthRouter( {children} ){
 		// 	if (res.err === null){
 		// 		setFlag(1);
 		// 	}
-		// })
+		// })getToken().length > 0
 	},[])
 	if (getToken().length > 0){
 		return (<>{children}</>);

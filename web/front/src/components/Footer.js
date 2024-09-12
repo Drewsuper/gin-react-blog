@@ -5,7 +5,7 @@ const Footer = function(){
 	const year = new Date().getFullYear();
 	// <!-- 社交平台 -->
 	return (
-		<div style={{"backgroundColor":"black","color":'rgba(255,255,255,0.6)',"marginBottom":"0vh","minHeight":"5vh"}}>
+		<div style={{"backgroundColor":"black","color":'rgba(255,255,255,0.6)',"marginBottom":"0vh","minHeight":"2vh"}}>
 		    <div style={{"padding":"5% 0 5% 1%"}}>
 		        <p>
 		            &copy; 2014 - {year}, Content By 李翰. All Rights Reserved.<br /><br/>

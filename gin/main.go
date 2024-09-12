@@ -29,6 +29,7 @@ func main() {
 	gin.SetMode(config.Config.Mode)
 	r := gin.Default()
 	r.LoadHTMLGlob("./web/*")
+	r.Static("/static", "./static")
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(200, "index.html", map[string]interface{}{
 			"data": types.CommonRps{

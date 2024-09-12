@@ -374,16 +374,51 @@ const getAllBlogClasses = async ()=>{
  }
 
 const upMDFile = async (data)=>{
-	var code = 200;
+	var reps = {
+		err: null,
+		data:"",
+	};
 	await axios.post("/api/md",JSON.stringify({conten:data})).then((res)=>{
 		if (res.data.code === 200){
-			return 200;
+			reps.err = null;
+			reps.data = res.data.data;
 		}else{
-			return 400;
+			reps.err = "failed";
+			reps.data = null;
 		}
 	}).catch((err)=>{
-		return 400;
+		reps.err = "failed";
+		reps.data = null;
 	})
+	return reps;
+}
+
+const newBlog = async (data)=>{
+	var reps = {
+		err:null,
+		data:""
+	}
+	var res_data = {
+		b_name: data.blog_name,
+		b_context: data.blog_context,
+		class_id: data.class_id,
+		des: data.des,
+		tag_id: data.tag_id,
+	}
+	await axios.post("/api/blog/new",JSON.stringify(res_data)).then((res)=>{
+			if (res.data.code == 200){
+				reps.err = null;
+				reps.data = res.data.data;
+			}
+			else{
+				reps.err = "failed";
+				reps.data = null;
+			}
+	}).catch((err)=>{
+		reps.err = "failed";
+		reps.data = null;
+	})
+	return reps;
 }
 
 export {
@@ -404,5 +439,5 @@ export {
 	deleteTags,
 	getTagetDataById,
 	upMDFile,
-	
+	newBlog,
 }
